@@ -26,13 +26,14 @@ get_str_len:
 	cmpb $0, (%rsi, %rdx)
 	je get_str_len_done
 
-	cmpb $97, (%rsi, %rdx)
-	jl 1f
+	cmpb $97, (%rsi, %rdx)  # checks if characters ascii decimal value is
+	jl 1f			# lower than lowercase a (97)
 
-	cmpb $122, (%rsi, %rdx)
-	jg 1f
+	cmpb $122, (%rsi, %rdx)	# and checks if ascii dec val is above lowercase z (122)
+	jg 1f			# if yes, skip subtraction and loop
 
-	subb $32, (%rsi, %rdx)
+	subb $32, (%rsi, %rdx)  # if character is lowercase letter, subtract 32
+				# to make uppercase as according to ascii
 	
 1:
 	addq $1, %rdx
@@ -42,13 +43,13 @@ get_str_len_done:
 
 
 
-	// syscall: write(%rdi, %rsi, %rdx)
-	//	syscalls destroy rcx and r11
-	//		rax used for return value
-	//
-	// %rdi is the file to write to
-	// %rsi is the start address
-	// %rdx is the number of bytes to write
+	/* syscall: write(%rdi, %rsi, %rdx)
+		syscalls destroy rcx and r11
+			rax used for return value
+	
+	  %rdi is the file to write to
+	  %rsi is the start address
+	  %rdx is the number of bytes to write */
 
 
 	mov $STDOUT_FILENO, %rdi
